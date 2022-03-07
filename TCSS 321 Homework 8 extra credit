@@ -1,0 +1,89 @@
+package com;
+
+import java.util.*;
+
+public class RuntimeMain {
+
+    public static void main(String[] args) {
+        Random rand = new Random();
+
+        long StartTime1, StartTime2, StartTime3;
+        int[] range = new int[]{1000, 2000, 4000, 8000, 16000, 32000, 64000, 128000, 256000,
+                521000, (int) 1e6, (int) 2e6, (int) 4e6, (int) 8e6, (int) 16e6,(int) 3e7};
+
+        for(int i = 0;  i < range.length; i++) {
+            int[] nums = new int[range[i]];
+
+            for (int j = 0; j < nums.length; j++) {
+                nums[j] = rand.nextInt();
+            }
+
+            System.out.print("Numbers in array = " + range[i]);
+            if(i < 7) {
+                // for int > 128000 it takes too much time so I'm limiting to the first 7 entries
+                StartTime1 = System.nanoTime();
+                alg1(nums);
+                System.out.print("\n\t Algorithm 1 Runtime in ms: " + (System.nanoTime() - StartTime1) / 1E6);
+
+                StartTime2 = System.nanoTime();
+                alg2(nums);
+                System.out.print("\n\t Algorithm 2 Runtime in ms:: " + (System.nanoTime() - StartTime2) / 1E6);
+            }
+
+            StartTime3 = System.nanoTime();
+            alg3(nums);
+            System.out.println("\n\t Algorithm 3 Runtime in ms:: " + (System.nanoTime() - StartTime3)/1E6);
+        }
+
+    }
+
+    // returns the range of values in the given array;
+    // the difference between elements furthest apart
+    // example: range({17, 29, 11, 4, 20, 8}) is 25
+    public static int alg1(int[] numbers) {
+        int diff = 0, maxDiff = 0;     // look at each pair of values
+        for (int i = 0; i < numbers.length; i++) {
+            for (int j = 0; j < numbers.length; j++) {
+                diff = Math.abs(numbers[j] - numbers[i]);
+                if (diff > maxDiff) {
+                    maxDiff = diff;
+                }
+            }
+        }
+        return maxDiff;
+    }
+
+    // returns the range of values in the given array;
+    // the difference between elements furthest apart
+    // example: range({17, 29, 11, 4, 20, 8}) is 25
+    public static int alg2(int[] numbers) {
+        int diff = 0, maxDiff = 0;     // look at each pair of values
+        for (int i = 0; i < numbers.length; i++) {
+            for (int j = i + 1; j < numbers.length; j++) {
+                diff = Math.abs(numbers[j] - numbers[i]);
+                if (diff > maxDiff) {
+                    maxDiff = diff;
+                }
+            }
+        }
+        return maxDiff;
+    }
+
+    // returns the range of values in the given array;
+    // example: range({17, 29, 11, 4, 20, 8}) is 25
+    public static int alg3(int[] numbers) {
+        int max = numbers[0];     // find max/min values
+        int min = max;
+        for (int i = 1; i < numbers.length; i++) {
+            if (numbers[i] < min) {
+                min = numbers[i];
+            }
+            if (numbers[i] > max) {
+                max = numbers[i];
+            }
+        }
+        return max - min;
+    }
+
+
+}
